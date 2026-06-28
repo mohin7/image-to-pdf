@@ -1,10 +1,19 @@
+import 'dart:io';
+
 abstract final class FileNameGenerator {
-  static String generatePdfName() {
+  static const _months = [
+    'january', 'february', 'march', 'april', 'may', 'june',
+    'july', 'august', 'september', 'october', 'november', 'december'
+  ];
+
+  static String generatePdfName(Directory dir) {
     final now = DateTime.now();
-    final date =
-        '${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}';
-    final time =
-        '${now.hour.toString().padLeft(2, '0')}${now.minute.toString().padLeft(2, '0')}${now.second.toString().padLeft(2, '0')}';
-    return 'PDF_${date}_$time.pdf';
+    final count = dir.listSync().where((e) => e.path.endsWith('.pdf')).length + 1;
+    
+    final day = now.day;
+    final month = _months[now.month - 1];
+    final year = now.year;
+    
+    return '${count}_pdf_${day}_${month}_$year.pdf';
   }
 }

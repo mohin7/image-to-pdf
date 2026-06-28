@@ -1,3 +1,4 @@
+import 'package:cunning_document_scanner/cunning_document_scanner.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -21,6 +22,17 @@ class ImageService {
       preferredCameraDevice: CameraDevice.rear,
     );
     return image?.path;
+  }
+
+  /// Opens the native document scanner (VisionKit on iOS, ML Kit on Android).
+  Future<List<String>> scanDocuments() async {
+    try {
+      final pictures = await CunningDocumentScanner.getPictures();
+      return pictures ?? [];
+    } catch (e) {
+      // Return empty list if the user cancels or an error occurs.
+      return [];
+    }
   }
 }
 

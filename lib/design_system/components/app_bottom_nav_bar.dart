@@ -96,7 +96,7 @@ class _AppBottomNavBarState extends State<AppBottomNavBar>
             ),
           ),
           child: SizedBox(
-            height: 56 + bottomPadding,
+            height: 72 + bottomPadding, // Increased from 56 to 72 for spacious, professional feel
             child: Padding(
               padding: EdgeInsets.only(bottom: bottomPadding),
               child: Row(
@@ -112,47 +112,50 @@ class _AppBottomNavBarState extends State<AppBottomNavBar>
                         widget.onTap(i);
                       },
                       child: SizedBox(
-                        height: 56,
+                        height: 72,
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            // Icon with animated pill background
+                            // Icon with elegant animated pill background
                             AnimatedContainer(
-                              duration: const Duration(milliseconds: 220),
-                              curve: Curves.easeInOut,
-                              width: isActive ? 52 : 36,
-                              height: 28,
+                              duration: const Duration(milliseconds: 350),
+                              curve: Curves.easeOutQuart,
+                              width: isActive ? 64 : 40,
+                              height: 32,
                               decoration: BoxDecoration(
                                 color: isActive
                                     ? accent.withValues(alpha: 0.12)
                                     : CupertinoColors.transparent,
-                                borderRadius: BorderRadius.circular(14),
+                                borderRadius: BorderRadius.circular(16),
                               ),
                               child: Center(
                                 child: ScaleTransition(
                                   scale: isActive
                                       ? _pillScale
                                       : const AlwaysStoppedAnimation(1.0),
-                                  child: Icon(
-                                    isActive ? item.activeIcon : item.icon,
-                                    size: 20,
-                                    color: isActive ? accent : inactive,
+                                  child: AnimatedSwitcher(
+                                    duration: const Duration(milliseconds: 250),
+                                    child: Icon(
+                                      isActive ? item.activeIcon : item.icon,
+                                      key: ValueKey<bool>(isActive),
+                                      size: isActive ? 22 : 24, // Slightly scale down inside pill for elegance
+                                      color: isActive ? accent : inactive,
+                                    ),
                                   ),
                                 ),
                               ),
                             ),
 
-                            const SizedBox(height: 2),
+                            const SizedBox(height: 6), // Increased spacing
 
                             // Label
                             AnimatedDefaultTextStyle(
-                              duration: const Duration(milliseconds: 200),
+                              duration: const Duration(milliseconds: 250),
+                              curve: Curves.easeOutCubic,
                               style: AppTypography.caption2.copyWith(
-                                color: isActive ? accent : inactive,
-                                fontWeight: isActive
-                                    ? FontWeight.w600
-                                    : FontWeight.w400,
-                                letterSpacing: isActive ? -0.1 : 0.07,
+                                color: isActive ? accent : inactive.withValues(alpha: 0.7),
+                                fontWeight: isActive ? FontWeight.w600 : FontWeight.w500,
+                                letterSpacing: 0.2, // Professional slight tracking
                               ),
                               child: Text(item.label),
                             ),

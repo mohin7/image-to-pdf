@@ -89,7 +89,7 @@ class SplitPdfNotifier extends Notifier<SplitPdfState> {
     try {
       final dir = await getApplicationDocumentsDirectory();
       final outputPath =
-          '${dir.path}/${FileNameGenerator.generatePdfName()}';
+          '${dir.path}/${FileNameGenerator.generatePdfName(dir)}';
 
       final pdfKit = ref.read(pdfKitServiceProvider);
       final resultPath = await pdfKit.splitPdf(

@@ -189,13 +189,72 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                     badgeColor: const Color(0xFF007AFF),
                     label: 'Privacy Policy',
                     value: '',
-                    onTap: () {},
+                    onTap: () => _showPrivacyPolicy(context),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: AppSpacing.sp40),
+
+            // ── Footer ───────────────────────────────────────────────────
+            Center(
+              child: Column(
+                children: [
+                  Text(
+                    'Built with ❤️ by Mohin',
+                    style: AppTypography.caption1.copyWith(
+                      color: AppColors.labelSecondary.resolveFrom(context),
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  CupertinoButton(
+                    padding: EdgeInsets.zero,
+                    onPressed: () {}, // Would use url_launcher in a full app
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          CupertinoIcons.link,
+                          size: 14,
+                          color: AppColors.accentBlue.resolveFrom(context),
+                        ),
+                        const SizedBox(width: 4),
+                        Text(
+                          'github.com/mohin7',
+                          style: AppTypography.caption1.copyWith(
+                            color: AppColors.accentBlue.resolveFrom(context),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  void _showPrivacyPolicy(BuildContext context) {
+    showCupertinoDialog(
+      context: context,
+      builder: (ctx) => CupertinoAlertDialog(
+        title: const Text('Privacy Policy'),
+        content: const Text(
+          '\nAll your files and images are processed completely on-device. '
+          'We do not upload, store, or share your data with any external servers. '
+          'Your privacy is 100% guaranteed.',
+        ),
+        actions: [
+          CupertinoDialogAction(
+            isDefaultAction: true,
+            onPressed: () => Navigator.pop(ctx),
+            child: const Text('Awesome'),
+          ),
+        ],
       ),
     );
   }
@@ -410,9 +469,9 @@ class _ProfileCard extends StatelessWidget {
 
           // ── Edit indicator ───────────────────────────────────────────
           Icon(
-            CupertinoIcons.pencil,
-            size: 16,
-            color: AppColors.labelTertiary.resolveFrom(context),
+            CupertinoIcons.square_pencil,
+            size: 18,
+            color: AppColors.labelSecondary.resolveFrom(context),
           ),
         ],
       ),

@@ -31,7 +31,7 @@ class SplitScreen extends ConsumerWidget {
       child: Stack(
         children: [
           SingleChildScrollView(
-            padding: EdgeInsets.only(bottom: AppSpacing.sp32 + MediaQuery.of(context).padding.bottom),
+            padding: EdgeInsets.only(bottom: AppSpacing.sp32 + 120.0 + MediaQuery.of(context).padding.bottom),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

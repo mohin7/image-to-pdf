@@ -83,7 +83,7 @@ class MergePdfNotifier extends Notifier<MergePdfState> {
     try {
       final dir = await getApplicationDocumentsDirectory();
       final outputPath =
-          '${dir.path}/${FileNameGenerator.generatePdfName()}';
+          '${dir.path}/${FileNameGenerator.generatePdfName(dir)}';
 
       final pdfKit = ref.read(pdfKitServiceProvider);
       final resultPath = await pdfKit.mergePdfs(

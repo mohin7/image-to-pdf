@@ -48,7 +48,7 @@ class PreviewActionBar extends ConsumerWidget {
               _ActionButton(
                 icon: CupertinoIcons.share,
                 label: 'Share',
-                onPressed: () => fileService.shareFile(result),
+                onPressed: (rect) => fileService.shareFile(result, sharePositionOrigin: rect),
               ),
               Text(
                 result.fileSizeDisplay,
@@ -59,7 +59,7 @@ class PreviewActionBar extends ConsumerWidget {
               _ActionButton(
                 icon: CupertinoIcons.folder_badge_plus,
                 label: 'Save to Files',
-                onPressed: () => fileService.saveToFiles(result),
+                onPressed: (rect) => fileService.saveToFiles(result, sharePositionOrigin: rect),
               ),
             ],
           ),
@@ -78,13 +78,19 @@ class _ActionButton extends StatelessWidget {
 
   final IconData icon;
   final String label;
-  final VoidCallback onPressed;
+  final void Function(Rect) onPressed;
 
   @override
   Widget build(BuildContext context) {
     return CupertinoButton(
       padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sp12),
-      onPressed: onPressed,
+      onPressed: () {
+        final box = context.findRenderObject() as RenderBox?;
+        final origin = box != null
+            ? box.localToGlobal(Offset.zero) & box.size
+            : Rect.largest;
+        onPressed(origin);
+      },
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [

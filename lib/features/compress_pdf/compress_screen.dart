@@ -33,7 +33,7 @@ class CompressScreen extends ConsumerWidget {
       child: Stack(
         children: [
           SingleChildScrollView(
-            padding: EdgeInsets.only(bottom: AppSpacing.sp32 + MediaQuery.of(context).padding.bottom),
+            padding: EdgeInsets.only(bottom: AppSpacing.sp32 + 120.0 + MediaQuery.of(context).padding.bottom),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -175,15 +175,24 @@ class CompressScreen extends ConsumerWidget {
                   Padding(
                     padding: const EdgeInsets.symmetric(
                         horizontal: AppSpacing.sp16),
-                    child: PrimaryButton(
-                      label: 'Share Compressed PDF',
-                      icon: CupertinoIcons.share,
-                      onPressed: () => Share.shareXFiles(
-                        [
-                          XFile(state.result!.filePath,
-                              mimeType: 'application/pdf')
-                        ],
-                        subject: state.result!.fileName,
+                    child: Builder(
+                      builder: (btnCtx) => PrimaryButton(
+                        label: 'Share Compressed PDF',
+                        icon: CupertinoIcons.share,
+                        onPressed: () {
+                          final box = btnCtx.findRenderObject() as RenderBox?;
+                          final origin = box != null
+                              ? box.localToGlobal(Offset.zero) & box.size
+                              : Rect.largest;
+                          Share.shareXFiles(
+                            [
+                              XFile(state.result!.filePath,
+                                  mimeType: 'application/pdf')
+                            ],
+                            subject: state.result!.fileName,
+                            sharePositionOrigin: origin,
+                          );
+                        },
                       ),
                     ),
                   ),

@@ -146,12 +146,21 @@ class MergeResultScreen extends StatelessWidget {
               const Spacer(),
 
               // Actions
-              PrimaryButton(
-                label: 'Share / Save to Files',
-                icon: CupertinoIcons.share,
-                onPressed: () => Share.shareXFiles(
-                  [XFile(result.filePath, mimeType: 'application/pdf')],
-                  subject: result.fileName,
+              Builder(
+                builder: (btnCtx) => PrimaryButton(
+                  label: 'Share / Save to Files',
+                  icon: CupertinoIcons.share,
+                  onPressed: () {
+                    final box = btnCtx.findRenderObject() as RenderBox?;
+                    final origin = box != null
+                        ? box.localToGlobal(Offset.zero) & box.size
+                        : Rect.largest;
+                    Share.shareXFiles(
+                      [XFile(result.filePath, mimeType: 'application/pdf')],
+                      subject: result.fileName,
+                      sharePositionOrigin: origin,
+                    );
+                  },
                 ),
               ),
               const SizedBox(height: AppSpacing.sp12),

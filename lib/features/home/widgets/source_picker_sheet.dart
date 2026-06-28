@@ -13,8 +13,20 @@ class SourcePickerSheet extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return CupertinoActionSheet(
       actions: [
-        // Camera is only available on iOS/iPadOS — not macOS
-        if (Platform.isIOS)
+        // Scan Document uses VisionKit/MLKit
+        if (Platform.isIOS || Platform.isAndroid)
+          CupertinoActionSheetAction(
+            onPressed: () async {
+              final service = ref.read(imageServiceProvider);
+              final notifier = ref.read(imageListProvider.notifier);
+              Navigator.of(context).pop();
+              final paths = await service.scanDocuments();
+              if (paths.isNotEmpty) notifier.addImages(paths);
+            },
+            child: const Text('Scan Document'),
+          ),
+        // Camera is only available on iOS/iPadOS/Android — not macOS
+        if (Platform.isIOS || Platform.isAndroid)
           CupertinoActionSheetAction(
             onPressed: () async {
               final service = ref.read(imageServiceProvider);

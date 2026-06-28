@@ -73,7 +73,7 @@ class CompressPdfNotifier extends Notifier<CompressPdfState> {
 
     try {
       final dir = await getApplicationDocumentsDirectory();
-      final outputPath = '${dir.path}/${FileNameGenerator.generatePdfName()}';
+      final outputPath = '${dir.path}/${FileNameGenerator.generatePdfName(dir)}';
 
       final pdfKit = ref.read(pdfKitServiceProvider);
       final resultPath = await pdfKit.compressPdf(

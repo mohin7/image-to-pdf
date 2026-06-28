@@ -71,16 +71,25 @@ class SplitResultList extends StatelessWidget {
                         ],
                       ),
                     ),
-                    CupertinoButton(
-                      padding: EdgeInsets.zero,
-                      onPressed: () => Share.shareXFiles(
-                        [XFile(r.filePath, mimeType: 'application/pdf')],
-                        subject: r.fileName,
-                      ),
-                      child: Icon(
-                        CupertinoIcons.share,
-                        size: 18,
-                        color: AppColors.accentBlue.resolveFrom(context),
+                    Builder(
+                      builder: (btnCtx) => CupertinoButton(
+                        padding: EdgeInsets.zero,
+                        onPressed: () {
+                          final box = btnCtx.findRenderObject() as RenderBox?;
+                          final origin = box != null
+                              ? box.localToGlobal(Offset.zero) & box.size
+                              : Rect.largest;
+                          Share.shareXFiles(
+                            [XFile(r.filePath, mimeType: 'application/pdf')],
+                            subject: r.fileName,
+                            sharePositionOrigin: origin,
+                          );
+                        },
+                        child: Icon(
+                          CupertinoIcons.share,
+                          size: 18,
+                          color: AppColors.accentBlue.resolveFrom(context),
+                        ),
                       ),
                     ),
                   ],
@@ -88,14 +97,23 @@ class SplitResultList extends StatelessWidget {
               ),
             )),
         const SizedBox(height: AppSpacing.sp8),
-        PrimaryButton(
-          label: 'Share All',
-          icon: CupertinoIcons.share,
-          variant: PrimaryButtonVariant.outline,
-          onPressed: () => Share.shareXFiles(
-            results
-                .map((r) => XFile(r.filePath, mimeType: 'application/pdf'))
-                .toList(),
+        Builder(
+          builder: (btnCtx) => PrimaryButton(
+            label: 'Share All',
+            icon: CupertinoIcons.share,
+            variant: PrimaryButtonVariant.outline,
+            onPressed: () {
+              final box = btnCtx.findRenderObject() as RenderBox?;
+              final origin = box != null
+                  ? box.localToGlobal(Offset.zero) & box.size
+                  : Rect.largest;
+              Share.shareXFiles(
+                results
+                    .map((r) => XFile(r.filePath, mimeType: 'application/pdf'))
+                    .toList(),
+                sharePositionOrigin: origin,
+              );
+            },
           ),
         ),
       ],

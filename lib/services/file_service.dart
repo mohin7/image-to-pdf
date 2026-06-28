@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
 
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
@@ -13,7 +14,7 @@ class FileService {
   /// Saves PDF bytes to the app's Documents directory and returns a [PdfResult].
   Future<PdfResult> savePdf(Uint8List bytes, {int pageCount = 0}) async {
     final dir = await getApplicationDocumentsDirectory();
-    final fileName = FileNameGenerator.generatePdfName();
+    final fileName = FileNameGenerator.generatePdfName(dir);
     final file = File('${dir.path}/$fileName');
     await file.writeAsBytes(bytes, flush: true);
 
@@ -34,12 +35,15 @@ class FileService {
     );
   }
 
-  /// Triggers the iOS share sheet — user can select "Save to Files" from there.
+  /// Triggers the native save-to-files dialog.
   Future<void> saveToFiles(PdfResult result, {ui.Rect? sharePositionOrigin}) async {
-    await Share.shareXFiles(
-      [XFile(result.filePath, mimeType: 'application/pdf')],
-      subject: result.fileName,
-      sharePositionOrigin: sharePositionOrigin ?? const ui.Rect.fromLTWH(0, 0, 1, 1),
+    final bytes = await File(result.filePath).readAsBytes();
+    await FilePicker.platform.saveFile(
+      dialogTitle: 'Save PDF',
+      fileName: result.fileName,
+      type: FileType.custom,
+      allowedExtensions: ['pdf'],
+      bytes: bytes,
     );
   }
 
